@@ -35,6 +35,7 @@ Planned:
 | State | Redux Toolkit |
 | Validation | Zod |
 | Secure storage | react-native-keychain |
+| Icons | Feather (@react-native-vector-icons/feather) |
 | Testing | Jest |
 | Quality | ESLint, Prettier, GitHub Actions |
 | APIs | DummyJSON (auth), Open Library (books) |
