@@ -8,3 +8,7 @@ jest.mock('react-native-keychain', () => ({
   getGenericPassword: jest.fn().mockResolvedValue(false),
   resetGenericPassword: jest.fn().mockResolvedValue(true),
 }));
+
+jest.mock('@react-native-vector-icons/feather', () => ({
+  default: jest.fn().mockReturnValue(null),
+}));
