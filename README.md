@@ -14,12 +14,13 @@ Done:
 - Validation rules for login and registration (Zod) with unit tests
 - Secure token storage in the Android Keystore / iOS Keychain
 - Redux Toolkit store with an auth slice
+- Auth API service and thunks: login, register, logout and session restore
 - Theme tokens (colors, spacing, radius, typography) in one place
 - CI: lint, type check and tests on every push and pull request
 
 Planned:
 
-- Login and registration with DummyJSON
+- Login and registration screens connected to the auth thunks
 - Book list and details from Open Library
 - Favourites that persist across app restarts
 - Smart search: debounced input, filter chips and an empty state
@@ -86,7 +87,7 @@ The project is organised by feature. Each feature owns its screens, state and te
 src/
 ├── app/               App entry, Redux store and typed hooks
 ├── features/
-│   ├── auth/          Schemas, auth slice, token storage, login/register screens
+│   ├── auth/          Schemas, auth slice, thunks, token storage, login/register screens
 │   ├── books/         Books screens (list, search, details)
 │   └── favourites/    Favourites screen
 ├── navigation/        Navigators and typed param lists
@@ -98,7 +99,7 @@ More folders (API layer, hooks, storage) are added together with the features th
 
 ## State management
 
-The app uses Redux Toolkit. The store currently has one slice, `auth`, which holds `isAuthenticated` and `userName`. The access token is not part of the Redux state: it is stored in the Keychain / Keystore through `tokenStorage.ts`. `RootNavigator` reads `isAuthenticated` to choose between the auth stack and the main tabs.
+The app uses Redux Toolkit, with `createAsyncThunk` for the auth flow. The store currently has one slice, `auth`, which holds `isAuthenticated` and `userName`. The access token is not part of the Redux state: it is stored in the Keychain / Keystore through `tokenStorage.ts`. `RootNavigator` reads `isAuthenticated` to choose between the auth stack and the main tabs.
 
 ## Navigation
 
@@ -112,6 +113,10 @@ Tests are written with Jest and live next to the code they cover, in `__tests__`
 
 Authentication uses [DummyJSON](https://dummyjson.com/docs/auth). Login needs a username (not an email) of an existing DummyJSON user, for example `emilys` / `emilyspass`. DummyJSON does not really save new users, so registration is simulated and sends the user back to the login screen.
 
+## Known issues
+
+- Access tokens expire after 60 minutes and token refresh is not implemented. If the stored token is rejected when the app starts, the user is signed out.
+
 ## Key decisions
 
 ### Decision 1: The auth token is stored in Keychain/Keystore, not in Redux
@@ -122,6 +127,7 @@ Authentication uses [DummyJSON](https://dummyjson.com/docs/auth). Login needs a 
 - The assignment brief says tokens must not be stored in AsyncStorage or MMKV. Secure storage is the required place for them.
 - On Android, `react-native-keychain` encrypts the data with a key that is protected by the OS secure storage (Android Keystore). That key cannot be exported.
 - Redux state is just JavaScript memory, and I will persist some of it (like favourites) to MMKV/AsyncStorage. If the token were in Redux, a persistence setup could save it to plain storage by mistake. Redux only holds non-sensitive session data, such as the user's name and the logged-in status.
+- Logout removes the token from the Keychain, so nothing stays on the device after the user signs out.
 
 **Alternatives I considered:**
 - Keeping the token in Redux and excluding it from persistence. I did not choose this because it depends on me never making a configuration mistake. Keeping the token out of Redux is safer by default.
@@ -129,9 +135,7 @@ Authentication uses [DummyJSON](https://dummyjson.com/docs/auth). Login needs a 
 
 ### Decision 2: Thunks for authentication, RTK Query for books
 
-*(Plan: I will update this section when these features are built.)*
-
-**What I plan to use:** I plan to use `createAsyncThunk` for the auth flow (login, register, logout and restoring the session when the app starts). I plan to use RTK Query for the Open Library data (book list, search and book details).
+**What I use:** I use `createAsyncThunk` for the auth flow (login, register, logout and restoring the session when the app starts). I plan to use RTK Query for the Open Library data (book list, search and book details).
 
 **Why:**
 - Login has several steps: call the DummyJSON API, save the token to Keychain, then save the user's name in Redux. A thunk lets me write these steps in order in one async function and handle errors in one place.
