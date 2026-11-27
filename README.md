@@ -150,4 +150,4 @@ Authentication uses [DummyJSON](https://dummyjson.com/docs/auth). Login needs a 
 
 ## AI usage
 
-See `AI_USAGE.md` (to be added).
+See [AI_USAGE.md](AI_USAGE.md).
