@@ -15,12 +15,12 @@ Done:
 - Secure token storage in the Android Keystore / iOS Keychain
 - Redux Toolkit store with an auth slice
 - Auth API service and thunks: login, register, logout and session restore
+- Login with DummyJSON and simulated registration (DummyJSON does not save new users, so after registering the user goes back to the login screen)
 - Theme tokens (colors, spacing, radius, typography) in one place
 - CI: lint, type check and tests on every push and pull request
 
 Planned:
 
-- Login and registration screens connected to the auth thunks
 - Book list and details from Open Library
 - Favourites that persist across app restarts
 - Smart search: debounced input, filter chips and an empty state
