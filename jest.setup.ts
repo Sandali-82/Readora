@@ -9,6 +9,8 @@ jest.mock('react-native-keychain', () => ({
   resetGenericPassword: jest.fn().mockResolvedValue(true),
 }));
 
-jest.mock('@react-native-vector-icons/feather', () => ({
-  default: jest.fn().mockReturnValue(null),
-}));
+// The Feather package loads a font file that Jest cannot parse, so icons are replaced with a plain Text component.
+jest.mock('@react-native-vector-icons/feather', () => {
+  const { Text } = require('react-native');
+  return { __esModule: true, default: Text };
+});
