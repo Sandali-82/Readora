@@ -4,6 +4,7 @@ import authReducer, { signedIn } from '@/features/auth/authSlice';
 import {
   loginUser,
   logoutUser,
+  registerUser,
   restoreSession,
 } from '@/features/auth/authThunks';
 import * as tokenStorage from '@/features/auth/tokenStorage';
@@ -112,5 +113,40 @@ describe('restoreSession', () => {
       isAuthenticated: false,
       isRestoring: false,
     });
+  });
+});
+
+describe('registerUser', () => {
+  const values = {
+    firstName: 'Nimal',
+    username: 'nimal01',
+    email: 'user@example.com',
+    password: 'readora123',
+    confirmPassword: 'readora123',
+  };
+
+  it('sends the registration but does not sign the user in', async () => {
+    mockedService.registerUser.mockResolvedValue({ id: 209 });
+    const store = createTestStore();
+
+    const result = await store.dispatch(registerUser(values));
+
+    expect(registerUser.fulfilled.match(result)).toBe(true);
+    expect(mockedStorage.saveToken).not.toHaveBeenCalled();
+    expect(store.getState().auth.isAuthenticated).toBe(false);
+  });
+
+  it('rejects with the error message when the request fails', async () => {
+    mockedService.registerUser.mockRejectedValue(
+      new Error('Network error. Check your connection and try again.'),
+    );
+    const store = createTestStore();
+
+    const result = await store.dispatch(registerUser(values));
+
+    expect(registerUser.rejected.match(result)).toBe(true);
+    expect(result.payload).toBe(
+      'Network error. Check your connection and try again.',
+    );
   });
 });
