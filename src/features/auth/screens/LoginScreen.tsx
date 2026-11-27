@@ -21,8 +21,10 @@ import { theme } from '@/theme';
 
 export default function LoginScreen({
   navigation,
+  route,
 }: AuthStackScreenProps<'Login'>) {
   const dispatch = useAppDispatch();
+  const justRegistered = route.params?.registered === true;
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {
@@ -56,6 +58,15 @@ export default function LoginScreen({
             title="Welcome Back!"
             subtitle="Continue your reading journey with Readora"
           />
+
+            {justRegistered ? (
+            <View style={styles.notice}>
+              <Text style={styles.noticeText}>
+                Account created (simulated). DummyJSON does not save new users,
+                so log in with a demo account such as emilys / emilyspass.
+              </Text>
+            </View>
+          ) : null}
 
           <View style={styles.form}>
             <AuthFormField
@@ -138,5 +149,15 @@ const styles = StyleSheet.create({
     ...theme.typography.small,
     color: theme.colors.textSecondary,
     textAlign: 'center',
+  },
+
+    notice: {
+    padding: theme.spacing.lg,
+    borderRadius: theme.radius.lg,
+    backgroundColor: theme.colors.lavender,
+  },
+  noticeText: {
+    ...theme.typography.caption,
+    color: theme.colors.text,
   },
 });
