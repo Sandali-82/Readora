@@ -9,7 +9,7 @@ export type AuthStackParamList = {
 
 export type HomeStackParamList = {
   Home: undefined;
-  Search: undefined;
+  Search: { subject?: string } | undefined;
   Details: { workId: string };
 };
 
