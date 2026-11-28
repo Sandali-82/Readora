@@ -3,10 +3,10 @@ import type { ComponentProps } from 'react';
 import { theme } from '@/theme';
 
 // All icons in the app go through this component, so they are always Feather icons.
-type FeatherName = ComponentProps<typeof Feather>['name'];
+export type IconName = ComponentProps<typeof Feather>['name'];
 
 type Props = {
-  name: FeatherName;
+  name: IconName;
   size?: number;
   color?: string;
 };
