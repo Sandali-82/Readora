@@ -16,6 +16,7 @@ Done:
 - Redux Toolkit store with an auth slice
 - Auth API service and thunks: login, register, logout and session restore
 - Login with DummyJSON and simulated registration (DummyJSON does not save new users, so after registering the user goes back to the login screen)
+- Open Library API (RTK Query) with typed mappers and tests
 - Theme tokens (colors, spacing, radius, typography) in one place
 - CI: lint, type check and tests on every push and pull request
 
@@ -89,14 +90,14 @@ src/
 ├── app/               App entry, Redux store and typed hooks
 ├── features/
 │   ├── auth/          Schemas, auth slice, thunks, token storage, login/register screens
-│   ├── books/         Books screens (list, search, details)
+│   ├── books/         Open Library API (api/), mappers and helpers (utils/), screens (list, search, details)
 │   └── favourites/    Favourites screen
 ├── navigation/        Navigators and typed param lists
 ├── shared/            Reusable components
 └── theme/             Design tokens
 ```
 
-More folders (API layer, hooks, storage) are added together with the features that need them.
+More folders (hooks, storage) are added together with the features that need them.
 
 ## State management
 
@@ -136,7 +137,7 @@ Authentication uses [DummyJSON](https://dummyjson.com/docs/auth). Login needs a 
 
 ### Decision 2: Thunks for authentication, RTK Query for books
 
-**What I use:** I use `createAsyncThunk` for the auth flow (login, register, logout and restoring the session when the app starts). I plan to use RTK Query for the Open Library data (book list, search and book details).
+**What I use:** I use `createAsyncThunk` for the auth flow (login, register, logout and restoring the session when the app starts). I use RTK Query for the Open Library data (book list, search and book details).
 
 **Why:**
 - Login has several steps: call the DummyJSON API, save the token to Keychain, then save the user's name in Redux. A thunk lets me write these steps in order in one async function and handle errors in one place.
