@@ -17,6 +17,7 @@ Done:
 - Auth API service and thunks: login, register, logout and session restore
 - Login with DummyJSON and simulated registration (DummyJSON does not save new users, so after registering the user goes back to the login screen)
 - Open Library API (RTK Query) with typed mappers and tests
+- Home screen with popular books, categories, and loading, error and empty states
 - Theme tokens (colors, spacing, radius, typography) in one place
 - CI: lint, type check and tests on every push and pull request
 
